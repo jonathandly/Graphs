@@ -121,23 +121,41 @@ class Graph:
         """
         Return a list containing the shortest path from
         starting_vertex to destination_vertex in
-        breath-first order.
+        breadth-first order.
         """
         # create a empty queue, and enqueue a PATH to the starting vertex
+        q = Queue()
         # queue.enqueue([starting_vertex])
+        q.enqueue(starting_vertex)
+
         # create a set for visited_vertices
+        visited_vertices = set()
+        current_path = []
         # while the queue is not empty:
+        while q.size() > 0:
             # dequeue the first PATH
             # grab the last vertex in the path
+            current_vertex = q.dequeue()
+            current_path.append(current_vertex)
+            # last_vertex = q.dequeue()
             # if it hasn't been visited
+            if current_vertex not in visited_vertices:
                 # check if its the target
+                if current_vertex == destination_vertex:
                     # Return the path
-            # mark it as visited
-            # make new versions of the current path, with each neighbor added to them
-                # duplicate the path
-                # add the neighbor
-                # add the new path to the queue
-        pass  # TODO
+                    return visited_vertices[current_path]
+                # mark it as visited
+                visited_vertices.add(current_vertex)
+                # make new versions of the current path, with each neighbor added to them
+                    # duplicate the path
+                    # add the neighbor
+                    # add the new path to the queue
+                for neighbor in self.get_neighbors(current_vertex):
+                    # print(current_vertex, neighbor)
+                    if neighbor not in visited_vertices:
+                        q.enqueue(neighbor)
+                        new_path.append(neighbor)
+                q.enqueue(new_path)
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -216,7 +234,7 @@ if __name__ == '__main__':
     Valid BFS path:
         [1, 2, 4, 6]
     '''
-    # print(graph.bfs(1, 6))
+    print(graph.bfs(1, 6))
 
     '''
     Valid DFS paths:
