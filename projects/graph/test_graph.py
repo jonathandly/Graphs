@@ -93,7 +93,7 @@ class Test(unittest.TestCase):
         self.graph.dft_recursive(1)
         output = sys.stdout.getvalue()
 
-        # self.assertIn(output, dft)
+        self.assertIn(output, dft)
 
         sys.stdout = stdout_  # Restore stdout
 
@@ -113,7 +113,7 @@ class Test(unittest.TestCase):
             [1, 2, 4, 6],
             [1, 2, 4, 7, 6]
         ]
-        # self.assertIn(self.graph.dfs_recursive(1,6), dfs)
+        self.assertIn(self.graph.dfs_recursive(1,6), dfs)
 
 if __name__ == '__main__':
     unittest.main()
