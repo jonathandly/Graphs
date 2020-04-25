@@ -118,10 +118,10 @@ class Graph:
         if visited == None:
             visited = set()
         visited.add(starting_vertex)
-
+        print(starting_vertex)
         for vertex in self.get_neighbors(starting_vertex):
             if vertex not in visited:
-               return self.dft_recursive(vertex, visited)
+                self.dft_recursive(vertex, visited)
 
     def bfs(self, starting_vertex, destination_vertex):
         """
