@@ -1,5 +1,18 @@
 import random
 
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -66,6 +79,7 @@ class SocialGraph:
 
     def get_all_social_paths(self, user_id):
         """
+        BFS
         Takes a user's user_id as an argument
 
         Returns a dictionary containing every user in that user's
@@ -77,6 +91,36 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
         return visited
 
+    def bfs(self, starting_vertex, destination_vertex):
+        # create a empty queue, and enqueue a PATH to the starting vertex
+        neighbors_to_visit = Queue()
+        neighbors_to_visit.enqueue([starting_vertex])
+
+        # create a set for visited vertices
+        visited_vertices = set()
+
+        # while the queue is not empty
+        while neighbors_to_visit.size() > 0:
+            # dequeue the first PATH
+            current_path = neighbors_to_visit.dequeue()
+            # grab the last vertex in the path
+            current_vertex = current_path[-1]
+            # if it hasn't been visited
+            if current_vertex not in visited_vertices:
+                # check if it's the target
+                if current_vertex == destination_vertex:
+                    return current_path
+                    # Return the path
+                # mark it as visited
+                visited_vertices.add(current_vertex)
+                # make new versions of the current path, with each neighbor added to them
+                for next_vertex in self.get_neighbors(current_vertex):
+                    # duplicate the path
+                    new_path = list(current_path)
+                    # add the neighbor
+                    new_path.append(next_vertex)
+                    # add the new path to the queue
+                    neighbors_to_visit.enqueue(new_path)
 
 if __name__ == '__main__':
     sg = SocialGraph()
