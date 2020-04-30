@@ -87,44 +87,69 @@ class SocialGraph:
 
         The key is the friend's ID and the value is the path.
         """
+        neighbors_to_visit = Queue()
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        neighbors_to_visit.enqueue([user_id])
+
+        while neighbors_to_visit.size() > 0:
+            # dequeue the first path
+            current_path = neighbors_to_visit.dequeue()
+            # Grab the last vertex 
+            current_vertex = current_path[-1]
+            
+            # if it has not been visited
+            if current_vertex not in visited:
+                # when we reach the unvisited vertex, add it to 
+                # visited dict but also, add the whole path that lead us here
+                visited[current_vertex] = current_path
+                # get all neighbors and add the path + the neighbor to the queue
+                for neighbor in self.friendships[current_vertex]:
+                    path_copy = current_path.copy()
+                    path_copy.append(neighbor)
+                    neighbors_to_visit.enqueue(path_copy)
+
         return visited
 
-    def bfs(self, starting_vertex, destination_vertex):
-        # create a empty queue, and enqueue a PATH to the starting vertex
-        neighbors_to_visit = Queue()
-        neighbors_to_visit.enqueue([starting_vertex])
+    # def bfs(self, starting_vertex, destination_vertex):
+    #     # create a empty queue, and enqueue a PATH to the starting vertex
+    #     neighbors_to_visit = Queue()
+    #     neighbors_to_visit.enqueue([starting_vertex])
 
-        # create a set for visited vertices
-        visited_vertices = set()
+    #     # create a set for visited vertices
+    #     visited_vertices = set()
 
-        # while the queue is not empty
-        while neighbors_to_visit.size() > 0:
-            # dequeue the first PATH
-            current_path = neighbors_to_visit.dequeue()
-            # grab the last vertex in the path
-            current_vertex = current_path[-1]
-            # if it hasn't been visited
-            if current_vertex not in visited_vertices:
-                # check if it's the target
-                if current_vertex == destination_vertex:
-                    return current_path
-                    # Return the path
-                # mark it as visited
-                visited_vertices.add(current_vertex)
-                # make new versions of the current path, with each neighbor added to them
-                for next_vertex in self.get_neighbors(current_vertex):
-                    # duplicate the path
-                    new_path = list(current_path)
-                    # add the neighbor
-                    new_path.append(next_vertex)
-                    # add the new path to the queue
-                    neighbors_to_visit.enqueue(new_path)
+    #     # while the queue is not empty
+    #     while neighbors_to_visit.size() > 0:
+    #         # dequeue the first PATH
+    #         current_path = neighbors_to_visit.dequeue()
+    #         # grab the last vertex in the path
+    #         current_vertex = current_path[-1]
+    #         # if it hasn't been visited
+    #         if current_vertex not in visited_vertices:
+    #             # check if it's the target
+    #             if current_vertex == destination_vertex:
+    #                 return current_path
+    #                 # Return the path
+    #             # mark it as visited
+    #             visited_vertices.add(current_vertex)
+    #             # make new versions of the current path, with each neighbor added to them
+    #             for next_vertex in self.get_neighbors(current_vertex):
+    #                 # duplicate the path
+    #                 new_path = list(current_path)
+    #                 # add the neighbor
+    #                 new_path.append(next_vertex)
+    #                 # add the new path to the queue
+    #                 neighbors_to_visit.enqueue(new_path)
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populate_graph(10, 2)
+    sg.populate_graph(100, 5)
     print(sg.friendships)
     connections = sg.get_all_social_paths(1)
+    print(f"Users in extended social network: {len(connections) - 1}")
     print(connections)
+
+total_social_paths = 0
+for user_id in connections:
+    total_social_paths += len(connections[user_id])
+    print(f"AVG length of social path: {total_social_paths / len(connections)}")
